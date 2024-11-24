@@ -38,6 +38,7 @@ def download_song(video_id: str, title: str) -> str:
         }],
         'outtmpl': os.path.join("./data/downloads/", '%(title)s.%(ext)s'),
         'quiet': True,
+        'writethumbnail': True,
     }
 
     video_url = f"https://music.youtube.com/watch?v={video_id}"
