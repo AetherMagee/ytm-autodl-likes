@@ -36,3 +36,5 @@ class SongDatabase:
         response = self.conn.execute("SELECT * FROM songs WHERE status = ?", (status,)).fetchall()
         return list(response)
 
+    def reset_noretrys(self):
+        self.conn.execute("UPDATE songs SET status = 'pending' WHERE status = 'failed_noretry'")

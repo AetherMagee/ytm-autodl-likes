@@ -58,6 +58,14 @@ def download_song(video_id: str, title: str) -> str:
 
 while True:
     try:
+        if os.path.exists("./data/reset-noretrys"):
+            logger.info("Resetting noretrys...")
+            db.reset_noretrys()
+            try:
+                os.remove("./data/reset-noretrys")
+            except Exception:
+                logger.warning("Failed to remove reset-noretrys indicator file!")
+
         logger.info("Getting liked songs...")
         current_likes = ytm.get_liked_songs(limit=None)
 
