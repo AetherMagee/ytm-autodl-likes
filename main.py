@@ -73,14 +73,17 @@ while True:
         failed_songs = db.get_songs_with_status("failed")
         pending_songs = db.get_songs_with_status("pending")
         to_download = failed_songs + pending_songs
-        logger.info(f"About to download {len(to_download)} songs ({len(failed_songs)} prev. failed and {len(pending_songs)} pending)")
 
-        for song in to_download:
-            new_status = download_song(song[0], song[1])
-            db.update_song_status(song[0], new_status)
+        if len(to_download) > 0:
+            logger.info(f"About to download {len(to_download)} songs ({len(failed_songs)} prev. failed and {len(pending_songs)} pending)")
+
+            for song in to_download:
+                new_status = download_song(song[0], song[1])
+                db.update_song_status(song[0], new_status)
     except Exception as e:
         traceback.print_exc()
         logger.error("Unable to complete cycle")
 
+    logger.info("Sleeping for 1 hour...")
     time.sleep(3600)
 
