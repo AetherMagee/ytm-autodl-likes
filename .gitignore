@@ -1,0 +1,6 @@
+.venv
+browser.json
+songs.db
+*.mp3
+.idea
+*.webm

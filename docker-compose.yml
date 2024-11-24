@@ -1,0 +1,8 @@
+services:
+  ytm-autodl:
+    container_name: ytm-autodl
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    tty: true
