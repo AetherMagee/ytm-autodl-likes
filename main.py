@@ -49,9 +49,10 @@ def download_song(video_id: str, title: str) -> str:
             ydl.download([video_url])
         logger.success(f"Successfully downloaded {video_id} | {title}")
         return "saved"
-    except Exception as e:
-        logger.error(f"Failed to download {video_id}: {str(e)}")
-        if "premium" in str(e).lower() or "sign in" in str(e).lower():
+    except Exception as error:
+        logger.error(f"Failed to download {video_id}: {str(error)}")
+        noretry_indicators = ["premium", "sign in", "not available"]
+        if any(indicator in str(error) for indicator in noretry_indicators):
             return "failed_noretry"
         return "failed"
 
