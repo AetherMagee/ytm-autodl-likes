@@ -6,3 +6,4 @@ services:
     volumes:
       - ./data:/app/data
     tty: true
+    env_file: .env

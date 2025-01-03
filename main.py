@@ -8,6 +8,9 @@ from ytmusicapi import YTMusic
 
 from db import SongDatabase
 
+SLEEP_TIME = int(os.getenv("SLEEP_TIME", 3600))
+PROXY_URL = os.getenv("PROXY_URL", None)
+
 db = SongDatabase()
 
 if not os.path.exists("./data/browser.json"):
@@ -23,6 +26,7 @@ except Exception as e:
     logger.error("Failed to initialize YTMusic object.")
     time.sleep(30)
     exit(1)
+
 
 def download_song(video_id: str, title: str) -> str:
     ydl_opts = {
@@ -40,6 +44,9 @@ def download_song(video_id: str, title: str) -> str:
         'quiet': True,
         'writethumbnail': True,
     }
+
+    if PROXY_URL:
+        ydl_opts['proxy'] = PROXY_URL
 
     video_url = f"https://music.youtube.com/watch?v={video_id}"
 
@@ -84,7 +91,8 @@ while True:
         to_download = failed_songs + pending_songs
 
         if len(to_download) > 0:
-            logger.info(f"About to download {len(to_download)} songs ({len(failed_songs)} prev. failed and {len(pending_songs)} pending)")
+            logger.info(
+                f"About to download {len(to_download)} songs ({len(failed_songs)} prev. failed and {len(pending_songs)} pending)")
 
             for song in to_download:
                 new_status = download_song(song[0], song[1])
@@ -93,6 +101,5 @@ while True:
         traceback.print_exc()
         logger.error("Unable to complete cycle")
 
-    logger.info("Sleeping for 1 hour...")
-    time.sleep(3600)
-
+    logger.info(f"Sleeping for {SLEEP_TIME} seconds...")
+    time.sleep(SLEEP_TIME)
