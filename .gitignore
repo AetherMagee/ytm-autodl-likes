@@ -4,3 +4,4 @@ songs.db
 *.mp3
 .idea
 *.webm
+.env
